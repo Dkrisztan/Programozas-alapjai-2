@@ -53,7 +53,7 @@ const char& String::operator[](unsigned int idx) const {
 String String::operator+(const String& rhs_s) const {
   String temp;
   temp.len = len + rhs_s.len;
-  delete []temp.pData;
+  delete[] temp.pData;
   temp.pData = new char[temp.len+1];
   strcpy(temp.pData, pData);
   strcat(temp.pData, rhs_s.pData);
@@ -75,13 +75,21 @@ std::istream& operator>>(std::istream& is, String& s0) {
 	is.setf(ios_base::skipws);
   while (is >> ch) {
 	  is.unsetf(ios_base::skipws);
-    if(isspace(ch)) {
-      is.putback(ch);
+    if(ch == '\n') {
       break;
-    } else {
-      s0 = s0 + ch;
     }
+    s0 = s0 + ch;
   }
 	is.setf(fl);
+  return is;
+}
+
+std::istream& getlineString(std::istream& is, String& str, char delim) {
+  char ch;
+  int i = 0;
+  while (is.get(ch) && ch != delim) {
+    str = str + ch;
+    i++;
+  }
   return is;
 }

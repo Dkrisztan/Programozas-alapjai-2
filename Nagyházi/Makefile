@@ -1,8 +1,8 @@
 # A filmpédia nagyházihoz készített makefile
 
-PROG = main   						# a program neve
-PROG_O = main.o string.o  # program object fájljai 
-PROG_H = string.h			    # program header fájljai
+PROG = main   																																							# a program neve
+PROG_O = main.o string.o film.o art.o hollywood.o european.o fareast.o filmcoll.o 					# program object fájljai 
+PROG_H = string.h	film.h art.h hollywood.h european.h fareast.h	heterocoll.hpp filmcoll.h 	# program header fájljai
 
 MTRACE_O = memtrace.o 		# memtrace object fájl
 MTRACE_H = memtrace.h 		# memtrace és memcheck header fájlja

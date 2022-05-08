@@ -4,6 +4,7 @@
 #define STRING_H
 
 #include <iostream>
+#include <cstring>
 
 class String {
   char *pData;
@@ -14,7 +15,7 @@ public:
 	size_t size() const { return len; }
 
   // C-sztringet ad vissza
-  const char* c_str() const { return pData;}
+  const char* c_str() const { return pData; }
   
   // Konstruktor egy char karakterből
   String(char ch);
@@ -37,6 +38,14 @@ public:
   // Értékadó operátor
   String& operator=(const String& rhs_s);
 
+  // Egyenlőség vizsgálat operátor
+  bool operator==(const String& rhs) const {
+    if (strcmp(this->c_str(), rhs.c_str()) == 0)
+      return 1;
+    else
+      return 0;
+  }
+
   // Két Stringet összefűz
   String operator+(const String& rhs_s) const;
 
@@ -48,6 +57,7 @@ public:
 
   // A string egy megadott indexű elemének REFERENCIÁJÁVAL tér vissza
   const char& operator[](unsigned int idx) const;
+
 };
 
 // Ostreamre való kiiratás
@@ -55,6 +65,9 @@ std::ostream& operator<<(std::ostream& os, const String& s0);
 
 // Szó beolvasása az istreamről egy stringbe
 std::istream& operator>>(std::istream& is, String& s0);
+
+// Getline függvény
+std::istream& getlineString(std::istream& is, String& str, char delim = '\n');
 
 // Karakterhez sztringet fűz
 inline String operator+(char ch, const String& str) { return String(ch) + str; }
