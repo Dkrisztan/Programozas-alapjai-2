@@ -65,15 +65,16 @@ void FilmColl::find(const String& tmp, std::ostream& os) const {
   bool result = false;
   for(unsigned int i = 0; i < filmCollection.getnElement(); i++) {
     if(filmCollection[i]->getTitle() == tmp) {
-      cout << "Van ilyen film! A film adatai:" << endl;
-      cout << endl;
+      os << "Van ilyen film! A film adatai:" << endl;
+      os << endl;
       filmCollection[i]->print(os);
       result = true;
     }
     os << endl;
   }
   if(!result) {
-    cout << "Nem talalhato ilyen film!" << endl;
+    os << "Nem talalhato ilyen film!" << endl;
+    throw "Nem talalhato ilyen film!";
   }
   os << endl;
 }
@@ -126,7 +127,7 @@ void FilmColl::fromFile(String s) {
 
   string split[7];
 
-  int row = nrRow("film.csv");
+  int row = nrRow(s.c_str());
 
   int i = 0;
   while(i < row) {

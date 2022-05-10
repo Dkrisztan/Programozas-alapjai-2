@@ -126,13 +126,13 @@ T MaratonStick(T first, Args... args) {
 }
 
 template<typename F>
-void Maraton(F first) {
-  cout << MaratonStick(first).getrunningTime() << endl;
+void Maraton(ostream& os, F first) {
+  os << MaratonStick(first).getrunningTime() << endl;
 }
 
 template<typename F, typename... fArgs>
-void Maraton(F first, fArgs... args) {
-  cout << MaratonStick(first,args...).getrunningTime() / 60.0 << " ora lenne ezeket a filmeket megnezni" << endl;
+void Maraton(ostream& os, F first, fArgs... args) {
+  os << MaratonStick(first,args...).getrunningTime() / 60.0 << " ora lenne ezeket a filmeket megnezni" << endl;
 }
 
 #endif

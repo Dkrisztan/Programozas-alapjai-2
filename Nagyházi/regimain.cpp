@@ -65,7 +65,7 @@ void menu() {
   } else {
     cout << "Rossz valasztas! Probald ujra!" << endl;
     sleep(2);
-    system("cls || clear");
+    cout << "\033[2J\033[1;1H";;
     menu();
   }
 }
@@ -74,7 +74,7 @@ int main() {
 
   // while(true) {          
   //   menu();                  
-  //   system("cls || clear");
+  //   cout << "\033[2J\033[1;1H";;
   // }
 
 
