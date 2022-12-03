@@ -15,8 +15,6 @@
 
 using namespace std;
 
-#define JPORTA
-
 FilmColl coll;
 
 // Eldönti egy stringről, hogy szám e
@@ -50,6 +48,7 @@ void menuoptions() {
 }
 
 void menu() {
+  fflush(stdin);
   menuoptions();
   int choice;
 
@@ -230,8 +229,12 @@ void menu() {
           cout << "\033[2J\033[1;1H";;
           menu();
 	      }
-        coll.remove(r);
-        cout << "Film torulve!" << endl;
+        try {
+          coll.remove(r);
+          cout << "Film torulve!" << endl;
+        } catch(char const* err) {
+          cout << "Kivetelt dobott mivel nem letezik ilyen id" << endl;
+        }
         sleep(2);
         cout << "\033[2J\033[1;1H";;
         menu();
@@ -289,7 +292,7 @@ void menu() {
   }
 }
 
-#ifdef JPORTA
+#ifdef CPORTA
 void tests() {
   // Konstruktor tesztelése
   TEST(Filmek, Konstruktorok) {
@@ -384,12 +387,37 @@ void tests() {
   } ENDM
 
   // Gyűjteménybe olvasás tesztelése
-  TEST(FilmGyujtemeny, FajlbolKiolvasas) {
+  // TEST(FilmGyujtemeny, FajlbolKiolvasas) {
+  //   FilmColl coll;
+  //   stringstream s;
+  //   coll.fromFile("test.txt");
+  //   coll.printAll(s);
+  //   EXPECT_STREQ("Id: 0\nCim: Frida\nRendezo: Julie Taymor\nHossz: 123 perc\nKiadasi ev: 2002\nLeiras: A film Frida Kahlo mexikoi festono eletet mutatja be. 1922-ben Mexikovarosban Frida elvezi diakeveit a rajongo ferfiakat.\nKategoria: Art\n\nId: 1\nCim: Spider-Man\nRendezo: Sam Raimi\nHossz: 121 perc\nKiadasi ev: 2002\nLeiras: A film kozeppontjaban Peter Parker all egy szerencsetlen kulonc tinedzser akinek az elete hatalmas fordulatot vesz miutan megcsipi egy mutans pok.\nKategoria: Hollywood\nNyert-e dijat?: Nem OscarAward nyertes\n\n\n\n", s.str().c_str());
+  // } ENDM
+
+  // Gyűjteményből törlünk adott elemet
+  TEST(FilmGyujtemeny, Torles) {
     FilmColl coll;
-    stringstream s;
-    coll.fromFile("test.csv");
-    coll.printAll(s);
-    EXPECT_STREQ("Id: 0\nCim: Frida\nRendezo: Julie Taymor\nHossz: 123 perc\nKiadasi ev: 2002\nLeiras: A film Frida Kahlo mexikoi festono eletet mutatja be. 1922-ben Mexikovarosban Frida elvezi diakeveit a rajongo ferfiakat.\nKategoria: Art\n\nId: 1\nCim: Spider-Man\nRendezo: Sam Raimi\nHossz: 121 perc\nKiadasi ev: 2002\nLeiras: A film kozeppontjaban Peter Parker all egy szerencsetlen kulonc tinedzser akinek az elete hatalmas fordulatot vesz miutan megcsipi egy mutans pok.\nKategoria: Hollywood\nNyert-e dijat?: Nem OscarAward nyertes\n\n\n\n", s.str().c_str());
+
+    Film *f = new Film("Frida","Julie Taymor",123,2002,"A film Frida Kahlo mexikoi festono eletet mutatja be. 1922-ben Mexikovarosban Frida elvezi diakeveit a rajongo ferfiakat.",retCatStr("Art"));
+    Hollywood *h = new Hollywood("Spider-Man","Sam Raimi",121,2002,"A film kozeppontjaban Peter Parker all egy szerencsetlen kulonc tinedzser akinek az elete hatalmas fordulatot vesz miutan megcsipi egy mutans pok.",false);
+    Art *a = new Art("Leon the Professional","Luc Besson",133,1994,"Egy olasz bergyilkos akinek nincsenek erzelmei sok tejet iszik ulve alszik es nagy rajongoja a Gene Kelly-filmeknek. O Leon (Jean Reno) aki a legjobb a varosban egyedul dolgozik es maganyosan el.", true);
+    European *e = new European("Intouchables","Olivier Nakache",108,2011,"Egy afrikai szarmazasu sofor bekesen vezet a kocsisorban a parizsi ejszakaban es idonkent figyelmes pillantast vet a mellette ulo korszakallas bajuszos feher utasara.",false);
+    FarEast *fe = new FarEast("Parasite","Bong Joon-ho",132,2019,"Kim Githek es csaladja egy felszuterenben lakik Szoulban ahova nem sut be a nap es rendszeresen az ablakuk ala vizelnek a reszegek. A csalad alkalmi munkakbol tengodik mikozben nagyra toro almaik vannak.",retOrg("Korea"));
+    
+    coll.add(*f);
+    coll.add(*h);
+    coll.add(*a);
+    coll.add(*e);
+    coll.add(*fe);
+
+    unsigned int elotte = 5;
+    unsigned int utana = 4;
+
+    // 5 elem van, kivonunk egyet => 4
+    EXPECT_EQ(elotte, coll.getFilmCollection().getnElement());
+    coll.remove(3);
+    EXPECT_EQ(utana, coll.getFilmCollection().getnElement());
   } ENDM
 
 }
@@ -397,7 +425,7 @@ void tests() {
 
 int main() {
 
-  #ifndef JPORTA
+  #ifndef CPORTA
   // Felhasználói felület ha nincs JPORTA definiálva -> menü
   while(true) {
     menu();
@@ -405,7 +433,7 @@ int main() {
   #endif
 
   // csak akkor teszteljen ha JPORTAN van, másképp felhasználói felület
-  #ifdef JPORTA
+  #ifdef CPORTA
   tests();
   #endif
 

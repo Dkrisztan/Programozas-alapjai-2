@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    ".env": "ini",
+    "iostream": "cpp",
+    "new": "cpp"
+  }
+}
